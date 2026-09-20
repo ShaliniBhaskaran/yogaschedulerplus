@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "heroku-postbuild": "npm run build",
     "seed": "tsx src/scripts/seedManager.ts",
     "test": "jest"
   },

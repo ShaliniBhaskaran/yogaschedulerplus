@@ -9,7 +9,7 @@
     "seed": "npm run seed --prefix server",
     "test": "npm test --prefix server && npm test --prefix client",
     "build": "(cd server && npm run build) && (cd client && npm run build)",
-    "heroku-postbuild": "(cd server && npm install) && (cd client && npm install) && npm run build",
+    "heroku-postbuild": "(cd server && npm install --include=dev) && (cd client && npm install --include=dev) && npm run build",
     "start": "cd server && npm start"
   },
   "keywords": [],

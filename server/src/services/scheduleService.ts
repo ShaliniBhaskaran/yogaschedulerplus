@@ -1,8 +1,17 @@
 import { Class } from '../models/Class';
 import { toMinutes, toTimeString, rangesOverlap } from '../utils/timeUtils';
 
-export async function findConflict(dayOfWeek: number, startTime: string, durationMinutes: number) {
-  const classesOnDay = await Class.find({ dayOfWeek, status: 'published' });
+export async function findConflict(
+  dayOfWeek: number,
+  startTime: string,
+  durationMinutes: number,
+  excludeClassId?: string
+) {
+  const query: Record<string, unknown> = { dayOfWeek, status: 'published' };
+  if (excludeClassId) {
+    query._id = { $ne: excludeClassId };
+  }
+  const classesOnDay = await Class.find(query);
   const newStart = toMinutes(startTime);
   return classesOnDay.find((c) => rangesOverlap(newStart, durationMinutes, toMinutes(c.startTime), c.durationMinutes)) || null;
 }

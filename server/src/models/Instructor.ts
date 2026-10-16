@@ -8,6 +8,7 @@ export interface IInstructor {
   phone: string;
   email: string;
   preferredContact: 'phone' | 'email';
+  passwordHash: string;
 }
 
 const instructorSchema = new Schema<IInstructor>({
@@ -18,6 +19,7 @@ const instructorSchema = new Schema<IInstructor>({
   phone: { type: String, required: true },
   email: { type: String, required: true },
   preferredContact: { type: String, enum: ['phone', 'email'], required: true },
+  passwordHash: { type: String, required: true }
 });
 
 export const Instructor = mongoose.model<IInstructor>('Instructor', instructorSchema);

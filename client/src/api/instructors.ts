@@ -33,3 +33,23 @@ export async function listInstructors(): Promise<Instructor[]> {
   const res = await client.get('/instructors/list');
   return res.data;
 }
+
+export async function updateInstructor(
+  instructorId: string,
+  data: {
+    firstName: string;
+    lastName: string;
+    address: string;
+    phone: string;
+    email: string;
+    preferredContact: 'phone' | 'email';
+  }
+): Promise<{ instructor: Instructor; confirmationMessage: string }> {
+  const res = await client.put(`/instructors/${instructorId}`, data);
+  return res.data;
+}
+
+export async function deleteInstructor(instructorId: string): Promise<{ confirmationMessage: string }> {
+  const res = await client.delete(`/instructors/${instructorId}`);
+  return res.data;
+}

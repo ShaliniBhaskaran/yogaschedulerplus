@@ -2,10 +2,14 @@ import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import client from '../api/client';
 
+type Role = 'manager' | 'instructor';
+
 interface AuthContextType {
   token: string | null;
   email: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  role: Role | null;
+  instructorId: string | null;
+  login: (email: string, password: string) => Promise<{ role: Role; instructorId: string | null }>;
   logout: () => void;
 }
 
@@ -25,22 +29,41 @@ function decodeEmailFromToken(token: string | null): string | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [email, setEmail] = useState<string | null>(decodeEmailFromToken(localStorage.getItem('token')));
+  const [role, setRole] = useState<Role | null>(localStorage.getItem('role') as Role | null);
+  const [instructorId, setInstructorId] = useState<string | null>(localStorage.getItem('instructorId'));
 
   async function login(email: string, password: string) {
     const res = await client.post('/auth/login', { email, password });
-    localStorage.setItem('token', res.data.token);
-    setToken(res.data.token);
-    setEmail(decodeEmailFromToken(res.data.token));
+    const { token: newToken, role: newRole, instructorId: newInstructorId } = res.data;
+
+    localStorage.setItem('token', newToken);
+    localStorage.setItem('role', newRole);
+    if (newInstructorId) {
+      localStorage.setItem('instructorId', newInstructorId);
+    } else {
+      localStorage.removeItem('instructorId');
+    }
+
+    setToken(newToken);
+    setEmail(decodeEmailFromToken(newToken));
+    setRole(newRole);
+    setInstructorId(newInstructorId ?? null);
+
+    return { role: newRole as Role, instructorId: newInstructorId ?? null };
   }
 
   function logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('instructorId');
     setToken(null);
     setEmail(null);
+    setRole(null);
+    setInstructorId(null);
   }
 
   return (
-    <AuthContext.Provider value={{ token, email, login, logout }}>
+    <AuthContext.Provider value={{ token, email, role, instructorId, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

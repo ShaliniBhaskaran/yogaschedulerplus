@@ -87,7 +87,7 @@ export default function ClassForm({ onCreated }: { onCreated: () => void }) {
       {step === 'form' && (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="instructorId" className="block text-sm font-medium text-gray-700 mb-1">Instructor</label>
+            <label htmlFor="instructorId" className="block text-sm font-medium text-gray-700 mb-1">Instructor <span className="text-red-600">*</span></label>
             <select
               id="instructorId"
               required
@@ -105,7 +105,7 @@ export default function ClassForm({ onCreated }: { onCreated: () => void }) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="dayOfWeek" className="block text-sm font-medium text-gray-700 mb-1">Day</label>
+              <label htmlFor="dayOfWeek" className="block text-sm font-medium text-gray-700 mb-1">Day <span className="text-red-600">*</span></label>
               <select
                 id="dayOfWeek"
                 required
@@ -120,7 +120,7 @@ export default function ClassForm({ onCreated }: { onCreated: () => void }) {
               </select>
             </div>
             <div>
-              <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">Start time</label>
+              <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">Start time <span className="text-red-600">*</span></label>
               <input
                 id="startTime"
                 type="time"
@@ -133,7 +133,7 @@ export default function ClassForm({ onCreated }: { onCreated: () => void }) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="durationMinutes" className="block text-sm font-medium text-gray-700 mb-1">Duration (min)</label>
+              <label htmlFor="durationMinutes" className="block text-sm font-medium text-gray-700 mb-1">Duration (min) <span className="text-red-600">*</span></label>
               <input
                 id="durationMinutes"
                 type="number"
@@ -147,7 +147,7 @@ export default function ClassForm({ onCreated }: { onCreated: () => void }) {
               />
             </div>
             <div>
-              <label htmlFor="payRate" className="block text-sm font-medium text-gray-700 mb-1">Pay rate ($)</label>
+              <label htmlFor="payRate" className="block text-sm font-medium text-gray-700 mb-1">Pay rate ($) <span className="text-red-600">*</span></label>
               <input
                 id="payRate"
                 type="number"
@@ -161,7 +161,7 @@ export default function ClassForm({ onCreated }: { onCreated: () => void }) {
             </div>
           </div>
           <div>
-            <label htmlFor="classType" className="block text-sm font-medium text-gray-700 mb-1">Class type</label>
+            <label htmlFor="classType" className="block text-sm font-medium text-gray-700 mb-1">Class type <span className="text-red-600">*</span></label>
             <select
               id="classType"
               required

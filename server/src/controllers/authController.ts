@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Manager } from '../models/Manager';
+import { Instructor } from '../models/Instructor';
 
 export async function login(req: Request, res: Response) {
   const { email, password } = req.body;
@@ -11,15 +12,32 @@ export async function login(req: Request, res: Response) {
   }
 
   const manager = await Manager.findOne({ email });
-  if (!manager) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+  if (manager) {
+    const valid = await bcrypt.compare(password, manager.passwordHash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const token = jwt.sign(
+      { email: manager.email, role: 'manager' },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '8h' }
+    );
+    return res.json({ token, role: 'manager' });
   }
 
-  const valid = await bcrypt.compare(password, manager.passwordHash);
-  if (!valid) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+  const instructor = await Instructor.findOne({ email });
+  if (instructor) {
+    const valid = await bcrypt.compare(password, instructor.passwordHash);
+    if (!valid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const token = jwt.sign(
+      { email: instructor.email, role: 'instructor', instructorId: instructor.instructorId },
+      process.env.JWT_SECRET as string,
+      { expiresIn: '8h' }
+    );
+    return res.json({ token, role: 'instructor', instructorId: instructor.instructorId });
   }
 
-  const token = jwt.sign({ email: manager.email }, process.env.JWT_SECRET as string, { expiresIn: '8h' });
-  res.json({ token });
+  res.status(401).json({ error: 'Invalid credentials' });
 }

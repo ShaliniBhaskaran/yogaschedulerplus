@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 export interface INotification {
-  recipientType: 'instructor' | 'manager';
+  recipientType: 'instructor' | 'manager' | 'customer';
   recipientId: string;
   channel: 'phone' | 'email';
   message: string;
@@ -9,7 +9,7 @@ export interface INotification {
 }
 
 const notificationSchema = new Schema<INotification>({
-  recipientType: { type: String, enum: ['instructor', 'manager'], required: true },
+  recipientType: { type: String, enum: ['instructor', 'manager', 'customer'], required: true },
   recipientId: { type: String, required: true },
   channel: { type: String, enum: ['phone', 'email'], required: true },
   message: { type: String, required: true },

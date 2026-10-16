@@ -43,3 +43,28 @@ export async function listClasses(): Promise<ClassItem[]> {
   const res = await client.get('/classes/list');
   return res.data;
 }
+
+export async function listMyClasses(): Promise<ClassItem[]> {
+  const res = await client.get('/classes/mine');
+  return res.data;
+}
+
+export async function updateClass(
+  id: string,
+  data: {
+    instructorId: string;
+    dayOfWeek: number;
+    startTime: string;
+    durationMinutes: number;
+    classType: 'General' | 'Special';
+    payRate: number;
+  }
+): Promise<{ class: ClassItem; confirmationMessage: string }> {
+  const res = await client.put(`/classes/${id}`, data);
+  return res.data;
+}
+
+export async function deleteClass(id: string): Promise<{ confirmationMessage: string }> {
+  const res = await client.delete(`/classes/${id}`);
+  return res.data;
+}
